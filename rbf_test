@@ -1,0 +1,35 @@
+function [label ] = rbf_test(data,W,input,model)
+
+if ~exist('model', 'var') || isempty(model)
+    % opt_normalize 参数为空，或者不以变量的形式存在；
+    model='1';
+end
+
+
+    if model=='1'
+    [high,width]=size(data);
+        [l,o]=size(input);
+    A=zeros(l,high);
+    for i=1:l
+        for j=1:high
+            A(i,j)=dist(input(i,:),data(j,:)');
+        end
+    end
+   label=A*W;
+    elseif  model=='2'
+    
+     [high,width]=size(data);
+           [l,o]=size(input);
+    A=zeros(l,high);
+    for i=1:l
+        for j=1:high
+              A(i,j)=exp( -1* (   dist(input(i,:),data(j,:)')^2/2    )) ;  
+        end
+    end
+  label=A*W;
+    
+    end
+
+
+end
+
