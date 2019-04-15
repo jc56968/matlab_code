@@ -1,0 +1,40 @@
+function [ W] = rbf_train( data ,label,model)
+%%rbf=(x-x1)^2
+%%calculate the matirx of RBF.
+%%model=1  y=sqrt((x1-x2)^2)
+%%model=2  y=e^(-1*(x1-x2)^2/2)
+if ~exist('model', 'var') || isempty(model)
+    % opt_normalize 参数为空，或者不以变量的形式存在；
+    model= '1';
+end
+
+    
+if model=='1'
+    [high,width]=size(data);
+    A=zeros(high,high);
+    for i=1:high
+        for j=1:high
+            A(i,j)=dist(data(i,:),data(j,:)');
+        end
+    end
+    A_1=inv(A)
+    W=A_1*label;
+elseif  model=='2'
+    
+     [high,width]=size(data);
+    A=zeros(high,high)
+    for i=1:high
+        for j=1:high
+              A(i,j)=exp( -1* (   dist(data(i,:),data(j,:)')^2/2    ))   ;
+        end
+    end
+    A_1=inv(A)
+    W=A_1*label;
+    
+end
+
+
+
+
+end
+
