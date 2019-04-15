@@ -1,0 +1,65 @@
+function [ output] = m_random_forest( input1  )
+%RANDOM_FOREST 输入为样本矩阵，行为样本，列为维数，aim为目标维数（默认最后一维）
+% way=1:最小信息熵；way=2:最小信息商率；way=3:基尼基数
+%   此处显示详细说明
+way=1;
+L=length(input1(1,:));
+field1='name';
+value1='inf';
+data = struct(field1,value1);
+
+
+for i=1:length(input1(1,:))
+    data(i,1).inf=dim_num( input1(:,i));
+end
+tup=1;
+class_num=0;
+if way==1
+     col_sum=length(input1(:,1));
+    for i=1:L-1
+        
+      
+        temp=0;
+        for q=1:length(data(i,1).inf(:,2))
+            
+           sh=shang( input1,i,data(i,1).inf(q,1) );
+           temp=temp+ data(i,1).inf(q,2)/col_sum*sh;
+        end
+        temp=0-temp;
+        if temp<tup
+            class_num=i;
+            tup=temp;
+            
+        end
+    end
+    [class_num, input1(1,class_num)]
+   
+    %输出当前分类点的维数和第一个值
+    
+    [m,n]=size(input1);
+    name=data( class_num,1).inf(:,1);
+    num=data( class_num,1).inf(:,2);
+    for cc=1:length(name)
+        next=zeros(num(cc,1),n);
+        ttt=1;
+        for uu=1:m
+            if(input1(uu,class_num)==name(cc,1))
+                next(ttt,:)=input1(uu,:);
+                ttt=ttt+1;
+            end
+        end
+        next(:,class_num)=[];
+        [o1,o2]=size(next);
+        if(o2>2)
+        m_random_forest(next)
+        end
+    end
+        
+    
+  
+    
+
+
+
+
+end
